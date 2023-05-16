@@ -1,0 +1,75 @@
+### GENERAL CONFIG ###
+
+# unique identifier for metrics calculation experiment
+exp_id: "deuce_deterministic_metrics"
+logging_level: INFO
+# debugging flag, so that we don't try and go trough all the samples
+# set to False or integer (num of samples to pick)
+debugging: False
+# If set to false, existing contingency tables will simply be used to compute metric values
+accumulate: True
+# number of chunks to divide the timestamps in for parallelization
+# for NO parallelization set to 0
+# otherwise set to a positive integer smalller than the number of test samples
+# recommended is to set equal or bigger to the number of available processing units
+n_chunks: 500
+n_workers: 20
+
+### PATH RELATED CONFIG ### 
+path: 
+    root: "data/metrics/{id}"
+    # template path to the files recording the final values of metrics that have been calculated
+    metrics: "data/metrics/{id}/{metric}_{method}.nc"
+    # template path for the npy file storing contigency tables recording partial metric calculations
+    states: "data/metrics/{id}/metric_states/state_{method}_{metric}.dump"
+    # the path to the text file containing a list of timestamps to calculate metrics on
+    timestamps: "datelists/fmi_rainy_days_bbox_test.txt"
+    # the path to the CSV file recording which metrics have been calculated
+    done: "data/metrics/{id}/done_{id}.csv"
+    # where to save copy of the input config
+    config_copy: "data/metrics/{id}/{id}_config.yaml"
+    # the path to the file containing logging output for the experiment
+    logging: "data/metrics/{id}/{id}.log"
+
+### PREDICTION RELATED CONFIG ### 
+
+# which prediction method name to calculate the metrics on
+# and path to the predictions
+methods:
+  bcnn:
+    path: data/deuce_nowcasts/deuce-mean.hdf5
+  extrapolation:
+    path: data/baseline_nowcasts/extrapolation.hdf5
+  linda-d:
+    path: data/baseline_nowcasts/linda-d.hdf5
+# measurement path
+measurements:
+  name: measurements
+  path: data/baseline_nowcasts/measurements.hdf5
+
+preprocessing:
+  convert_mmh: false
+  threshold : 8.0
+  zerovalue : -10.0
+
+# leadtimes to calculate the metrics for as units of 5 minutes
+n_leadtimes: 12
+# if set to True, will mask all predictions the same, using "logical and" operation
+common_mask: True
+
+### METRICS RELATED CONFIG ###
+metrics:
+    CONT:
+        init_kwargs:
+            cont_metrics: ["MAE", "ME"]
+            leadtimes : [1,2,3,4,5,6,7,8,9,10,11,12]
+    CAT:
+        init_kwargs:
+            cat_metrics: ["CSI", "ETS"]
+            leadtimes : [1,2,3,4,5,6,7,8,9,10,11,12]
+            thresh: [20,25,35,45]
+    RAPSD:
+        init_kwargs:
+            leadtimes: [1,3,6,12]
+
+

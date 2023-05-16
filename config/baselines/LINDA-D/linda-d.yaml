@@ -1,0 +1,50 @@
+data_source_name : fmi
+
+# platform specific paths
+datelist_path : "datelists/fmi_rainy_days_bbox_test.txt"
+hdf5_path : "data/baseline_nowcasts/linda-d-mmh.hdf5"
+
+input : 
+  num_next_files : 3
+
+preprocessing : 
+  bbox : [125,637,604,1116] # bounding box in pixel coordinates
+  downscaling : 1.0 # factor by which to downscale the bboxed image. 1.0 indicates no change
+  transformation : "db_inverse"
+  conversion : "rainrate"
+  threshold : 0.1
+  zerovalue : 0.0
+  nan_to_zero : true # convert NaN values to 'zerovalue'
+
+nowcast : 
+  nowcast_method : "linda"
+  oflow_method : "lucaskanade"
+  sample_slice : [-3, null, null]
+  oflow_slice : [0, null, 1]
+  n_leadtimes : 12
+  oflow_params : {} 
+  nowcast_params : 
+    add_perturbations : false
+    num_workers : 20
+    use_multiprocessing : true
+    feature_method : domain
+    extrap_kwargs :
+        interp_order : 3
+
+postprocessing : 
+  transformation : "db_inverse"
+  conversion : "reflectivity"
+  threshold : 8.0
+  zerovalue : -10.0
+  nan_to_zero : false # convert NaN values to 'zerovalue'
+  
+save : 
+  save_indexes : [0,1,2,3,4,5,6,7,8,9,10,11]
+  group_format : "{timestamp}/{method}"
+  method_name : "linda-d"
+  what_attrs : 
+    quantity : DBZH
+    gain : 0.5
+    offset : -32
+    nodata : 255
+    undetect : 255

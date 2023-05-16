@@ -1,0 +1,12 @@
+# FMI composite data platform specific path definitions
+importer : "hdf5"
+# for use with HDF5 importer # 
+hdf5_path : "data/deuce_inputs/fmi_2019-2021_dataset_float.hdf5"
+
+# for use with PGM GZIP importer # 
+# path and filename can contain the following tokens:
+# {year:*}, {month:*}, {day:*}, {hour:*}, {minute:*}, {second:*}
+# Path to archive
+path: ""
+# Filename format
+filename: ""

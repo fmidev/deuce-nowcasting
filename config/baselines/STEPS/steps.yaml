@@ -1,0 +1,59 @@
+data_source_name : fmi
+
+# platform specific paths
+datelist_path : "datelists/fmi_rainy_days_bbox_test.txt"
+hdf5_path : "data/baseline_nowcasts/steps.hdf5"
+
+input : 
+  num_next_files : 3
+
+preprocessing : 
+  bbox : [125,637,604,1116]
+  convert : false
+  db_transform : false
+  threshold : 8.0
+  zerovalue : -10.0
+  nan_to_zero : true
+  downscaling : 1.0
+
+nowcast : 
+  nowcast_method : "steps"
+  oflow_method : "lucaskanade"
+  sample_slice : [-3, null, null]
+  oflow_slice : [0, null, 1]
+  n_leadtimes : 12
+  oflow_params : {} 
+  nowcast_params : 
+    n_ens_members : 48
+    num_workers : 20
+    R_thr : 8.0
+    n_cascade_levels : 6
+    kmperpixel : 1.0
+    timestep : 5
+    noise_method : "nonparametric"
+    vel_pert_method : "bps"
+    vel_pert_kwargs : # lucaskanade/fmi+mch parameters
+      p_par :  [2.31970635, 0.33734287, -2.64972861]
+      p_perp : [1.90769947, 0.33446594, -2.06603662] 
+    mask_method : "incremental"
+    extrap_kwargs :
+        interp_order : 3
+
+postprocessing : 
+  db_transform : false
+  convert : false
+  threshold : 8.0
+  zerovalue : -10.0
+  nan_to_zero : false
+
+save : 
+  save_indexes : [0,1,2,3,4,5,6,7,8,9,10,11] 
+  group_format : "{timestamp}/{method}"
+  method_name : "steps"
+  what_attrs : 
+    quantity : DBZH
+    gain : 0.5
+    offset : -32
+    nodata : 255
+    undetect : 255
+

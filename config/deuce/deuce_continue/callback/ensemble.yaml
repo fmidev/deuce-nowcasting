@@ -1,0 +1,63 @@
+lr_monitor:
+  name : learning_rate_monitor
+  kwargs : {}
+
+model_checkpoint : 
+  name : model_checkpoint
+  kwargs : 
+    dirpath : "checkpoints/checkpoint_bcnn/"
+    save_top_k : 5
+    monitor : mean_valid_ETS
+    mode : max
+    save_on_train_epoch_end : False
+
+#early_stopping : 
+#  name : early_stopping
+#  kwargs : 
+#    monitor : validate_data_loss
+#    patience : 10
+
+#curriculum : 
+#  name : curriculum_learning
+#  kwargs : 
+#    mapping :
+#      train_leadtimes: 
+#        0 : 12
+#        1 : 12
+#        2 : 12
+#        3 : 12
+#        4 : 12
+
+log_prob_nowcast : 
+  name : log_probabilistic_nowcast
+  kwargs : 
+    # Logging parameters
+    # Display radar plot every {train_display} training step
+    train_display : 50
+    # Display radar plot on valid/test steps corresponding to batch_idxs' contained in {verif_display}
+    verif_display : [0,10]
+    # Quantity to convert predictions and uncertainties into for plotting
+    # DBZH, RR, logRR, logunitRR
+    quantity : logunitRR
+    # colormaps
+    prediction_cmap : viridis
+    uncertainty_cmap : plasma
+    # number of standard deviations to represent uncertainties
+    n_stds : 1
+
+nowcast_metrics :
+  name : nowcast_metrics
+  kwargs : 
+    # Metrics configuration
+    # thresholds in mm/h for categorical metrics
+    thresholds : [01,05,10,20,30]
+    # do we save metrics and plots to files too
+    save_metrics : False
+    # in which folder to save 
+    save_folder : saved_metrics
+    # Which sample dimensions to average metrics over
+    reduce_dims : [0,2,3] 
+    # here, B,H,W assuming B,T,W,H data
+    # "deterministic" or "probabilistic" for probabilistic forecasts with
+    # sample dimension as first dimension.
+    input_mode : probabilistic

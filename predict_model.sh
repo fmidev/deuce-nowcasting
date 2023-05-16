@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --account=project_2006199
-#SBATCH --job-name=predict_ms_bcnn_noiter
+#SBATCH --account=
+#SBATCH --job-name=predict_model
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -12,6 +12,6 @@
 
 module load pytorch
 
-srun python predict_model.py results/multiscale_bcnn_noiter/multiscale_bcnn_noiter_ms_bcnn_noiter.ckpt config/ms_bcnn puhti --model multiscale_loss_bcnn --data fmi &> predict_ms_bcnn_noiter.out
+srun python predict_model.py data/deuce_model_checkpoints/deuce_model.ckpt config/deuce/deuce_continue_2 default --model bcnn --data fmi &> predict_model.out
 
 seff $SLURM_JOBID

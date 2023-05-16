@@ -1,0 +1,31 @@
+# experiment config
+experiment_id : "bcnn_512_cases_2022"
+save_path_fmt : "results/{id}/"
+savefile : "bcnn_512_cases_2022"
+
+trainer_kwargs : 
+  max_epochs : 10
+  max_time : "00:23:00:00"
+  limit_train_batches : 1.0
+  limit_val_batches : 1.0
+  limit_predict_batches : 1.0
+  gpus : 1
+  val_check_interval : 1.0
+  log_every_n_steps : 50
+  gradient_clip_val : 0.5
+  profiler : null
+
+prediction_output : 
+  name : bcnn_hetero_hdf5_writer
+  kwargs :
+    db_name : "deuce-raw_cases_2022.hdf5"
+    group_format : "{timestamp}/{method}"
+    method_name: "bcnn"
+
+logging:
+  level: info
+  format: "[%(levelname)s]%(asctime)s:%(filename)s:%(funcName)s:%(lineno)s: %(message)s"
+  dateformat: "%Y/%m/%d %H:%M"
+  path: "results/logs"
+  filename: "{year}{month:02d}{day:02d}{hour:02d}{minute:02d}{second:02d}.log"
+

@@ -1,0 +1,74 @@
+# Parameters for the bayesian CNN
+
+nowcasting_params : 
+  train_display : 50
+  device : "cuda:0"
+  train_leadtimes : 12
+  verif_leadtimes : 12
+  predict_leadtimes : 12
+
+ensemble_params : 
+  train_samples : 2
+  verif_samples : 2
+  predict_samples : 48
+
+vi_params:
+  epochs_at_start : 0
+  fit_context : flipout
+  closed_form_kldiv : True
+  # equal, blundell
+  kl_weighting : blundell
+  prior : 
+    name : IID_normal
+    kwargs : 
+      loc : 0.0
+      scale : 0.1 
+      #scale : [0.005, 0.1]
+      #probs : [0.5, 0.5]
+  guide : 
+    init_scale : 1e-2
+
+lr_scheduler : 
+  name : reduce_lr_on_plateau
+  monitor : mean_valid_ETS
+  kwargs : 
+    mode : max
+    factor : 0.1
+    patience : 3
+
+loss:
+  name: gaussian_nll
+  kwargs:
+    sigma : null
+    mode : heteroscedastic
+    learnable : True
+    #weights : [0.5, 0.5]
+  
+optim : 
+  name : adam
+  kwargs :
+    # Optimizer kwargs
+    lr : 0.000001
+    betas : [0.90, 0.999]
+    weight_decay : 0.0
+
+nn : 
+  name : "unet"
+  kwargs : 
+    n_input_timesteps : 12
+    dropout_probability : 0.0
+    mode : heteroscedastic_regression
+    encoder_shape : [
+      ["1", [12,64]],
+      ["2" , [64,128]],
+      ["3" , [128,256]],
+      ["4" , [256,512]],
+      ["5" , [512,1024]]]
+    decoder_shape :
+      [["6" , [1536,512]],
+      ["7" , [768,256]],
+      ["8" , [384,128]],
+      ["9" , [192,64]]]
+    last_shape : 
+      last : [[64,24], [24,12]]
+
