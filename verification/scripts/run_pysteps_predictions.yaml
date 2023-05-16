@@ -1,0 +1,48 @@
+data_source_name : fmi
+
+# platform specific paths
+datelist_path : "datelists/fmi_rainy_days_bbox_test.txt"
+hdf5_path : "path1/db1.hdf5"
+
+input : 
+  num_next_files : 3
+
+preprocessing : 
+  bbox : [125,637,604,1116]
+  convert : false
+  db_transform : false
+  threshold : 8.0
+  zerovalue : -10.0
+  nan_to_zero : true
+  downscaling : 1.0
+
+nowcast : 
+  nowcast_method : "extrapolation"
+  oflow_method : "lucaskanade"
+  sample_slice : [-1, null, null]
+  oflow_slice : [0, null, 1]
+  n_leadtimes : 12
+  oflow_params : {} 
+  nowcast_params : 
+    extrap_kwargs :
+        interp_order : 3
+        allow_nonfinite_values : true
+
+postprocessing : 
+  db_transform : false
+  convert : false
+  threshold : 8.0 
+  zerovalue : -10.0
+  nan_to_zero : false
+  
+save : 
+  save_indexes : [0,1,2,3,4,5,6,7,8,9,10,11] 
+  group_format : "{timestamp}/{method}"
+  method_name : "method_1"
+  what_attrs : 
+    quantity : DBZH
+    gain : 0.5
+    offset : -32
+    nodata : 255
+    undetect : 255
+

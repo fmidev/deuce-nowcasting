@@ -1,0 +1,31 @@
+data_source_name : fmi
+
+# platform specific paths
+datelist_path : "datelists/days/fmi_rainy_days_cases_2022.txt"
+hdf5_path : "/data/PINCAST/bayesian_rainnet/nowcasts/fmi_obs_2022.hdf5"
+
+n_leadtimes : 
+
+input : 
+  num_next_files : 0
+
+save : 
+  save_indexes : [0]
+  group_format : "{timestamp}/{method}"
+  what_attrs : 
+    quantity : DBZH
+    gain : 0.5
+    offset : -32
+    nodata : 255
+    undetect : 255
+
+preprocessing : 
+  bbox : [125,637,604,1116]
+  nan_to_zero : False
+  downsampling : False
+  threshold : null
+
+nowcast : 
+  nowcast_method : "measurements"
+
+postprocessing : {}

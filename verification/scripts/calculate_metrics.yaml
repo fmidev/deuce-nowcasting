@@ -1,0 +1,78 @@
+### GENERAL CONFIG ###
+
+# unique identifier for metrics calculation experiment
+exp_id: "example_metrics_exp_id"
+logging_level: INFO
+# debugging flag, so that we don't try and go trough all the samples
+# set to False or integer (num of samples to pick)
+debugging: false
+# If set to false, existing contingency tables will simply be used to compute metric values
+accumulate: True
+# number of chunks to divide the timestamps in for parallelization
+# for NO parallelization set to 0
+# otherwise set to a positive integer smalller than the number of test samples
+# recommended is to set equal or bigger to the number of available processing units
+n_chunks: 100
+n_workers: 20
+
+### PATH RELATED CONFIG ### 
+path: 
+    root: "results/{id}"
+    # template path to the npy files recording the final values of metrics that have been calculated
+    metrics: "results/{id}/{method}/{id}_{metric}_{method}.npy"
+    # path to the text file containing metric names in order
+    name: "results/{id}/{method}/{id}_{metric}_{method}_names.txt"
+    # template path for the npy file storing contigency tables recording partial metric calculations
+    tables: "results/{id}/{method}/table_{method}.npy"
+    # the path to the text file containing a list of timestamps to calculate metrics on
+    timestamps: "datelists/fmi_rainy_days_bbox_test.txt"
+    # the path to the CSV file recording which metrics have been calculated
+    done: "results/{id}/done_{id}.csv"
+    # where to save copy of the input config
+    config_copy: "results/{id}/{id}_config.yaml"
+    # the path to the file containing logging output for the experiment
+    logging: "results/{id}/{id}.log"
+
+
+### PREDICTION RELATED CONFIG ### 
+
+# which prediction method name to calculate the metrics on
+# and path to the predictions
+methods:
+  method_1:
+    path: path1/db1.hdf5
+  method_2:
+    path: path2/db2.hdf5
+# measurement path
+measurements:
+  name: measurements
+  path: path3/path3.hdf5
+
+# data related pre-processing configuration
+preprocessing:
+  #convert dBZ to mm/h ? 
+  convert_mmh: false 
+  #threshold for observable precipitation (after possible conversion)
+  threshold : 8.0 
+  #value to apply to pixels below observable precipitation
+  zerovalue : -10.0
+  
+# leadtimes to calculate the metrics for as units of 5 minutes
+n_leadtimes: 12
+# if set to True, will mask all predictions the same, using "logical and" operation
+common_mask: True
+
+### METRICS RELATED CONFIG ###
+
+# Possible choices are defined in pincast_verif.metric_tools.get_metric_class
+# an entry for each metric to be calculated
+metrics: 
+    CONT:
+        init_kwargs:  
+            cont_metrics: ["MAE", "ME"]
+            leadtimes: [1,3,6,12]
+    CAT:
+        init_kwargs:
+            cat_metrics: ["POD", "FAR", "CSI", "ETS"]
+            leadtimes: [1,3,6,12]
+            thresh: [20,25,35,45]

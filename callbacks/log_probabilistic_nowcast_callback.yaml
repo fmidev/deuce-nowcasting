@@ -1,0 +1,18 @@
+# Logging parameters
+
+# Display radar plot every {train_display} training step
+train_display : 50
+
+# Display radar plot on valid/test steps corresponding to batch_idxs' contained in {verif_display}
+verif_display : [0]
+
+# Quantity to convert predictions and uncertainties into for plotting
+# DBZH, RR, logRR, logunitRR
+quantity : "logRR"
+
+# colormaps
+prediction_cmap : "viridis"
+uncertainty_cmap : "plasma"
+
+# number of standard deviations to represent uncertainties
+n_stds : 2

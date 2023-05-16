@@ -1,0 +1,11 @@
+__pycache__/
+*.ipynb
+results/
+db/
+.vscode/
+notebooks/
+*.egg-info
+*.hdf5
+config/
+!config/example/
+datelists/

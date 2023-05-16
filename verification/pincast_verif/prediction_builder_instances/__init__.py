@@ -1,0 +1,2 @@
+from pincast_verif.prediction_builder_instances.pysteps_prediction import *
+from pincast_verif.prediction_builder_instances.measurements import *
