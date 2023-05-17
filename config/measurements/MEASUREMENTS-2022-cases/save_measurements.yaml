@@ -1,8 +1,8 @@
 data_source_name : fmi
 
 # platform specific paths
-datelist_path : ""
-hdf5_path : ""
+datelist_path : "datelists/days/fmi_rainy_timestamps_cases_2022_select.txt"
+hdf5_path : "data/baseline_nowcasts/measurements-2022-cases.hdf5"
 
 n_leadtimes : 
 
