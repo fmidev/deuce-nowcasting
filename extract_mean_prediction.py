@@ -53,5 +53,5 @@ if __name__ == "__main__":
     args = argparser.parse_args()
 
     input_path = Path(args.input)
-    output_path = input_path.with_name(input_path.stem + "_mean.hdf5")
+    output_path = input_path.with_name("deuce-mean.hdf5")
     run(input_path=input_path, output_path=output_path)
