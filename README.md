@@ -106,8 +106,42 @@ where the downloaded `data/metrics` contains final metric values in netcdf forma
 | `deuce_rapsd_member_metric` | RAPSD for DEUCE ensemble member |
 | `deuce_uncertainty_composition` | Aleatoric and epistemic components of DEUCE over the verification set |
 
+### Measurements to HDF5
+
+For DEUCE post-processing and metric calculation, we convert uncropped PGM composites to cropped images stored in an HDF5 archive similar to those containing nowcasts. This can be achieved by 
+
+1. Creating the `data/baseline_nowcasts/` directory if not existing
+2. Running the `save_measurements.py` script with given configurations for 2019-2021 data and 2022 case data respectively, i.e., 
+
+```bash
+python verification/scripts/save_measurements.py config/measurements/MEASUREMENTS/save_measurements.yaml
+python verification/scripts/save_measurements.py config/measurements/MEASUREMENTS-2022-cases/save_measurements.yaml
+```
+
 ### DEUCE post-processing
 
+DEUCE raw nowcasts are post-processed using two distinctive scripts,
+
+|Script|Description|Output|
+| --- | --- | --- |
+|`combine_prediction_uncertainties.py`|Extract epistemic and aleatoric variances, use them to estimate predictive variance, which is sampled using spatially-correlated noise and saved|$\mathbf{\hat{y}}^{\text{ens}}$|
+|`extract_mean_prediction.py`|Extract and save the ensemble mean|$\mathbf{\hat{y}}_{\text{mean}}$|
+
+Assuming that you have the inputs rightly named in the locations specified and the , these scripts are run using
+
+```bash
+python extract_mean_prediction.py -i data/deuce_nowcasts/deuce-raw.hdf5
+python combine_prediction_uncertainties.py -i data/deuce_nowcasts/deuce-raw.hdf5 -o data/baseline_nowcasts/measurements.hdf5
+```
+
 ### Baseline prediction generation
+
+Baseline nowcasts for the work can be generated using the `run_pysteps_prediction.py` script, i.e., 
+
+```bash
+python verification/scripts/run_pysteps_prediction.py config/baselines
+```
+
+The HDF5 archives of nowcasts will be saved under the `data/baseline_nowcasts` directory. Please consider that making these nowcasts (esp. LINDA-P nowcasts) takes considerable time.
 
 ### Metric computation
