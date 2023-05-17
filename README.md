@@ -7,6 +7,8 @@ manuscript by Bent Harnist, Seppo Pulkkinen, and Terhi Mäkinen.
 
 ## Training and making predictions
 
+> * ⚠️ The total storage space required for the data (including nowcasts) after running all scripts is ~ **300 GB**.
+
 ### Installation
 
 Start by cloning the repository on a platform with GPU available. Make a new virtual environment for the training where you install the dependencies in `pytorch_requirements.txt`, including the [Tyxe](https://github.com/TyXe-BDL/TyXe) library that has to be installed from Github.
@@ -103,7 +105,7 @@ where the downloaded `data/metrics` contains final metric values in netcdf forma
 | --- | --- |
 | `deuce_deterministic_metrics` | Deterministic metrics (ETS,ME,RAPSD) |
 | `deuce_probabilistic_metrics` | Probabilistic metrics (CRPS,RANKHIST,RELDIAG,ROC) |
-| `deuce_rapsd_member_metric` | RAPSD for DEUCE ensemble member |
+| `deuce_rapsd_member_metric` | RAPSD for DEUCE ensemble members |
 | `deuce_uncertainty_composition` | Aleatoric and epistemic components of DEUCE over the verification set |
 
 ### Measurements to HDF5
@@ -127,7 +129,7 @@ DEUCE raw nowcasts are post-processed using two distinctive scripts,
 |`combine_prediction_uncertainties.py`|Extract epistemic and aleatoric variances, use them to estimate predictive variance, which is sampled using spatially-correlated noise and saved|$\mathbf{\hat{y}}^{\text{ens}}$|
 |`extract_mean_prediction.py`|Extract and save the ensemble mean|$\mathbf{\hat{y}}_{\text{mean}}$|
 
-Assuming that you have the inputs rightly named in the locations specified and the , these scripts are run using
+Assuming that you have the inputs rightly named in the locations specified, these scripts are run using
 
 ```bash
 python extract_mean_prediction.py -i data/deuce_nowcasts/deuce-raw.hdf5
@@ -136,7 +138,7 @@ python combine_prediction_uncertainties.py -i data/deuce_nowcasts/deuce-raw.hdf5
 
 ### Baseline prediction generation
 
-Baseline nowcasts for the work can be generated using the `run_pysteps_prediction.py` script, i.e., 
+Baseline nowcasts for the work can be generated using the `verification/scripts/run_pysteps_prediction.py` script, i.e., 
 
 ```bash
 python verification/scripts/run_pysteps_prediction.py config/baselines
@@ -145,3 +147,22 @@ python verification/scripts/run_pysteps_prediction.py config/baselines
 The HDF5 archives of nowcasts will be saved under the `data/baseline_nowcasts` directory. Please consider that making these nowcasts (esp. LINDA-P nowcasts) takes considerable time.
 
 ### Metric computation
+
+Once all nowcasts are produced, verification metrics can be computed using the `verification/scripts/calculate_metrics.py` script, run for all configurations using
+
+```bash
+# deterministic metrics (ETS,ME,RAPSD)
+python verification/scripts/calculate_metrics.py config/metrics/calculate_det_metrics.yaml
+# probabilistic metrics (CRPS,RANKHIST,RELDIAG,ROC)
+python verification/scripts/calculate_metrics.py config/metrics/calculate_prob_metrics.yaml
+# RAPSD for DEUCE ensemble members
+python verification/scripts/calculate_metrics.py config/metrics/calculate_rapsd_member.yaml
+```
+
+Additionally, the composition statistics of the DEUCE predictive uncertainty can be computed using 
+
+```bash
+python compute_uncertainty_composition.py -p data/deuce_nowcasts/deuce-raw.hdf5 -o data/baseline_nowcasts/measurements.hdf5 -r data/metrics/deuce_uncertainty_composition
+```
+
+Resulting nowcasts and metrics are visualized using the Jupypter notebooks of the `notebooks/` directory. 
