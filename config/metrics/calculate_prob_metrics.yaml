@@ -23,7 +23,7 @@ path:
     # template path for the npy file storing contigency tables recording partial metric calculations
     states: "data/metrics/{id}/metric_states/state_{method}_{metric}.dump"
     # the path to the text file containing a list of timestamps to calculate metrics on
-    timestamps: "datelists/fmi_rainy_days_bbox_test.txt"
+    timestamps: "datelists/fmi_rainy_days_bbox_predict.txt"
     # the path to the CSV file recording which metrics have been calculated
     done: "data/metrics/{id}/done_{id}.csv"
     # where to save copy of the input config

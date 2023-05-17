@@ -1,7 +1,7 @@
 data_source_name : fmi
 
 # platform specific paths
-datelist_path : "datelists/fmi_rainy_days_bbox_test.txt"
+datelist_path : "datelists/fmi_rainy_days_bbox_predict.txt"
 hdf5_path : "data/baseline_nowcasts/linda-d-mmh.hdf5"
 
 input : 
