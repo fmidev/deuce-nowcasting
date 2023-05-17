@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     input_path = Path(args.input)
     obs_path = (Path(args.observations))
-    output_path = input_path.with_name(input_path.stem + "_combined_vars.hdf5")
+    output_path = input_path.with_name("deuce-combined.hdf5")
     combine_uncertainties(
         input_path=input_path,
         output_path=output_path,
