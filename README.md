@@ -95,7 +95,7 @@ with `$DEUCE_WORKING_DIRECTORY` refers to the absolute path pointing to this rep
 Pre-computed verification metrics (4.4 MB) can be fetched using
 
 ```bash
-https://fmi.b2share.csc.fi/api/files/6b8e9bff-c1f7-4fbf-b1d9-7f6544c1fe1f/metrics.zip
+wget https://fmi.b2share.csc.fi/api/files/6b8e9bff-c1f7-4fbf-b1d9-7f6544c1fe1f/metrics.zip
 unzip metrics.zip && rm metrics.zip
 ```
 
