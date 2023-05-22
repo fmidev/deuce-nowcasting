@@ -5,6 +5,8 @@ manuscript by Bent Harnist, Seppo Pulkkinen, and Terhi Mäkinen.
 
 > The data for reproducing experiments is available at https://doi.org/10.23728/fmi-b2share.3efcfc9080fe4871bd756c45373e7c11. 
 
+![Graphical abstract of the manuscript.](data/graphical_abstract.png)
+
 ## Training and making predictions
 
 > * ⚠️ The total storage space required for the data (including nowcasts) after running all scripts is ~ **300 GB**.
