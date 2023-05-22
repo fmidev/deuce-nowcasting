@@ -1,7 +1,7 @@
 # DEUCE v1.0: A neural network for probabilistic precipitation nowcasting with aleatoric and epistemic uncertainties
 
 This repository contains the source code used for the production of the results of the *DEUCE v1.0: A neural network for probabilistic precipitation nowcasting with aleatoric and epistemic uncertainties* 
-manuscript by Bent Harnist, Seppo Pulkkinen, and Terhi Mäkinen. 
+manuscript by Bent Harnist, Seppo Pulkkinen, and Terhi Mäkinen, as well as instructions below on how to reproduce those resuts. 
 
 > The data for reproducing experiments is available at https://doi.org/10.23728/fmi-b2share.3efcfc9080fe4871bd756c45373e7c11. 
 
@@ -9,7 +9,7 @@ manuscript by Bent Harnist, Seppo Pulkkinen, and Terhi Mäkinen.
 
 ## Training and making predictions
 
-> * ⚠️ The total storage space required for the data (including nowcasts) after running all scripts is ~ **300 GB**.
+> ⚠️ The total storage space required for the data (including nowcasts) after running all scripts is ~ **300 GB**.
 
 ### Installation
 
