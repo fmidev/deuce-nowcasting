@@ -1,5 +1,7 @@
 # DEUCE v1.0: A neural network for probabilistic precipitation nowcasting with aleatoric and epistemic uncertainties
 
+[![DOI](https://zenodo.org/badge/641371028.svg)](https://zenodo.org/badge/latestdoi/641371028)
+
 This repository contains the source code used for the production of the results of the *DEUCE v1.0: A neural network for probabilistic precipitation nowcasting with aleatoric and epistemic uncertainties* 
 manuscript by Bent Harnist, Seppo Pulkkinen, and Terhi Mäkinen, as well as instructions below for how to reproduce those results. 
 
