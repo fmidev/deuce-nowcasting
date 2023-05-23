@@ -98,7 +98,8 @@ Pre-computed verification metrics (4.4 MB) can be fetched using
 
 ```bash
 wget https://fmi.b2share.csc.fi/api/files/7dc059f4-420a-49f5-a4cf-4d54cb585bcd/metrics.zip
-unzip metrics.zip && rm metrics.zip
+mkdir metrics/
+unzip metrics.zip -d metrics/ && rm metrics.zip
 ```
 
 where the downloaded `data/metrics` contains final metric values in netcdf format, along with other outputs of the metric computation scripts, divided into four folders:
