@@ -1,5 +1,7 @@
 # DEUCE v1.0: A neural network for probabilistic precipitation nowcasting with aleatoric and epistemic uncertainties
 
+[![DOI](https://zenodo.org/badge/641371028.svg)](https://zenodo.org/badge/latestdoi/641371028)
+
 This repository contains the source code used for the production of the results of the *DEUCE v1.0: A neural network for probabilistic precipitation nowcasting with aleatoric and epistemic uncertainties* 
 manuscript by Bent Harnist, Seppo Pulkkinen, and Terhi Mäkinen, as well as instructions below for how to reproduce those results. 
 
@@ -18,7 +20,7 @@ Start by cloning the repository on a platform with GPU available. Make a new vir
 Fetch the training data (3.3 GB) and put it under the `data/` directory by moving there and using
 
 ```bash
-wget https://fmi.b2share.csc.fi/api/files/6b8e9bff-c1f7-4fbf-b1d9-7f6544c1fe1f/deuce_inputs.zip
+wget https://fmi.b2share.csc.fi/api/files/7dc059f4-420a-49f5-a4cf-4d54cb585bcd/deuce_inputs.zip
 unzip deuce_inputs.zip && rm deuce_inputs.zip
 ```
 The `data/deuce_inputs` directory now contains two HDF5 files:
@@ -33,7 +35,7 @@ The `data/deuce_inputs` directory now contains two HDF5 files:
 Also fetch the model Pytorch Lightning checkpoints (2.7 GB) using
 
 ```bash
-wget https://fmi.b2share.csc.fi/api/files/6b8e9bff-c1f7-4fbf-b1d9-7f6544c1fe1f/deuce_model_checkpoints.zip
+wget https://fmi.b2share.csc.fi/api/files/7dc059f4-420a-49f5-a4cf-4d54cb585bcd/deuce_model_checkpoints.zip
 unzip deuce_model_checkpoints.zip && rm deuce_model_checkpoints.zip
 ```
 
@@ -66,8 +68,8 @@ pip install -e .
 Now fetch the radar composites used for the verification (1.5 GB) by moving to the `data/` directory and using 
 
 ```bash
-wget https://fmi.b2share.csc.fi/api/files/6b8e9bff-c1f7-4fbf-b1d9-7f6544c1fe1f/verif_inputs.zip
-wget https://fmi.b2share.csc.fi/api/files/6b8e9bff-c1f7-4fbf-b1d9-7f6544c1fe1f/verif_case_inputs.zip
+wget https://fmi.b2share.csc.fi/api/files/7dc059f4-420a-49f5-a4cf-4d54cb585bcd/verif_inputs.zip
+wget https://fmi.b2share.csc.fi/api/files/7dc059f4-420a-49f5-a4cf-4d54cb585bcd/verif_case_inputs.zip
 unzip verif_inputs.zip && rm verif_inputs.zip
 unzip verif_case_inputs.zip && rm verif_case_inputs.zip
 mv verif_case_inputs/* verif_inputs/
@@ -97,8 +99,9 @@ with `$DEUCE_WORKING_DIRECTORY` refers to the absolute path pointing to this rep
 Pre-computed verification metrics (4.4 MB) can be fetched using
 
 ```bash
-wget https://fmi.b2share.csc.fi/api/files/6b8e9bff-c1f7-4fbf-b1d9-7f6544c1fe1f/metrics.zip
-unzip metrics.zip && rm metrics.zip
+wget https://fmi.b2share.csc.fi/api/files/7dc059f4-420a-49f5-a4cf-4d54cb585bcd/metrics.zip
+mkdir metrics/
+unzip metrics.zip -d metrics/ && rm metrics.zip
 ```
 
 where the downloaded `data/metrics` contains final metric values in netcdf format, along with other outputs of the metric computation scripts, divided into four folders:
