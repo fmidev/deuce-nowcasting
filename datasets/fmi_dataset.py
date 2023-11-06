@@ -168,10 +168,20 @@ class AbstractFMIDataset(AbstractRadarDataset):
         return window[self.num_frames_input - 1]
 
     def storage_to_input_conversion(self, data: torch.Tensor):
-        return torch.Tensor(((data + 32.0) / 127.0)).type(torch.float)
+        if self.normalization_method == "unit":
+            return torch.Tensor(((data + 32.0) / 127.0)).type(torch.float)
+        elif self.normalization_method == "none":
+            return data
+        else:
+            raise ValueError
 
     def output_to_storage_conversion(self, data: torch.Tensor):
-        return ((data * 127) - 32)
+        if self.normalization_method == "unit":
+            return ((data * 127) - 32)
+        elif self.normalization_method == "none":
+            return data
+        else:
+            raise ValueError
 
 
 class FMIDatasetPGM(AbstractFMIDataset, PgmInterfaceFMI):

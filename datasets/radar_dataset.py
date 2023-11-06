@@ -30,6 +30,8 @@ class AbstractRadarDataset(Dataset, ABC):
         normalization_method = "unit", # unit
         return_idx_with_batch = True, 
         force_channel_dimension = False,
+        data_weighted_loss : bool = False,
+        weight_loss_map_fn : str = None,
         ) -> None:
 
         Dataset.__init__(self)
@@ -59,7 +61,7 @@ class AbstractRadarDataset(Dataset, ABC):
         self.zerovalue = zerovalue
         self.zr_relationship = zr_relationship
 
-        if normalization_method not in ["unit"]:
+        if normalization_method not in ["unit", "none"]:
             raise NotImplementedError(f"data normalization method {normalization_method} not implemented, please choose from ['unit', 'none']")
         else:    
             self.normalization_method = normalization_method
@@ -75,6 +77,12 @@ class AbstractRadarDataset(Dataset, ABC):
             )
         else:
             self.upsampling = np.nanmean
+
+        
+        self.data_weighted_loss = data_weighted_loss
+        if self.data_weighted_loss:
+            self.loss_weight_map = torch.load(weight_loss_map_fn)
+            self.max_loss_weight_map_key = max(list(self.loss_weight_map.keys()))
 
     def __len__(self):
         """Mandatory property for Dataset."""
@@ -116,12 +124,17 @@ class AbstractRadarDataset(Dataset, ABC):
             block_size = (1,block_x, block_y)
         else:
             block_size = (1,1,block_x,block_y)
-        raw_data = block_reduce(
-                raw_data, func=np.nanmean, cval=0, block_size=block_size
-            )
+        raw_data = torch.Tensor(block_reduce(
+                raw_data.numpy(), func=np.nanmean, cval=0, block_size=block_size
+            ))
         
         if self.apply_threshold:
             raw_data[raw_data < self.threshold] = self.zerovalue
+        if self.data_weighted_loss:
+            weights = raw_data[self.num_frames_input:].clone()
+            weights.apply_(lambda x : self.loss_weight_map.get(int(x), self.loss_weight_map[self.max_loss_weight_map_key]))
+        else:
+            weights = None
 
         data = self.storage_to_input_conversion(raw_data)
 
@@ -133,8 +146,10 @@ class AbstractRadarDataset(Dataset, ABC):
         return {
             "inputs" : inputs,
             "outputs": outputs, 
-            "idx": idx
+            "idx": idx,
+            "weights" : weights,
         }
+        
 
 
     ####################################

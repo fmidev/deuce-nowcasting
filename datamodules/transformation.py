@@ -45,15 +45,26 @@ class NowcastingTransformation:
         batch_input_size = batch["inputs"].size()
         x = batch["inputs"]
         y = batch["outputs"]
+        weights = batch["weights"]
         if len(batch_input_size) == 5 and batch_input_size[2] != 1 and "rotate" in self.transformation_cfg:
             raise NotImplementedError("Nowcasting transformation not implemented for 3D data yet,")
         elif len(batch_input_size) == 5 and "rotate" in self.transformation_cfg:
             x = x[:,:,0]
             y = y[:,:,0]
-        transformed = self.transform(torch.cat([x,y], dim=1))
+            if weights is not None:
+                weights = weights[:,:,0]
+        if weights is not None:
+            transformed = self.transform(torch.cat([x,y,weights], dim=1))
+        else:
+            transformed = self.transform(torch.cat([x,y], dim=1))
         batch_transformed = batch.copy()
         if len(batch_input_size) == 5:
             transformed = transformed[:,:,None,...]
-        batch_transformed["inputs"] = transformed[:,:x.shape[1]]
-        batch_transformed["outputs"] = transformed[:,x.shape[1]:]
+        if weights is not None:
+            batch_transformed["inputs"] = transformed[:,:x.shape[1]]
+            batch_transformed["outputs"] = transformed[:,x.shape[1]:x.shape[1]+y.shape[1]]
+            batch_transformed["weights"] = transformed[:,x.shape[1]+y.shape[1]:]
+        else:
+            batch_transformed["inputs"] = transformed[:,:x.shape[1]]
+            batch_transformed["outputs"] = transformed[:,x.shape[1]:]
         return batch_transformed

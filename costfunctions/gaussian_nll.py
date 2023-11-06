@@ -14,7 +14,7 @@ class GaussianNLL(nn.Module):
         learnable : bool = False,
         sigma : float = None,
         beta : float = 0.0, #0.0 is pure NLL loss
-        loss_kwargs : dict = {}
+        loss_kwargs : dict = {},
         ):
 
         super(GaussianNLL, self).__init__()
@@ -31,7 +31,9 @@ class GaussianNLL(nn.Module):
         assert (beta >= 0.0) and (beta <= 1.0), "beta should take values between zero and one"
         self.beta = beta
         
-    def forward(self, input, target, var = None, beta = None):
+    def forward(self, batch, target, var = None, beta = None):
+        input = batch["outputs"]
+        weights = batch["weights"]
         assert input.shape == target.shape
 
         # to allow potentially dynamically modifying beta
@@ -51,4 +53,9 @@ class GaussianNLL(nn.Module):
             var = torch.ones_like(input) * self.var
             
         loss = (var.detach() ** beta) * self.loss_function(input, target, var)
-        return loss.mean()
+
+        if weights is None:
+            return loss.mean()
+        else:
+            return (weights * loss).sum()
+

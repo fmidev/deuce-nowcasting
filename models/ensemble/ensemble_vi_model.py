@@ -52,7 +52,7 @@ class EnsembleVIModel(EnsembleModel, VIModel):
                 y_hat = self.postprocess_outputs(y_hat_raw)
 
             y_seq[s] = y_hat.detach()
-            next_data_loss = self.calculate_loss(y, y_hat_raw, leadtimes)
+            next_data_loss = self.calculate_loss(batch, y_hat_raw, leadtimes)
             data_loss += (sum(next_data_loss) if isinstance(next_data_loss, list) else next_data_loss)
             kl_loss += self.bnn.cached_kl_loss * self.kl_weight(
                 batch_idx = self.global_step, current_epoch = self.current_epoch

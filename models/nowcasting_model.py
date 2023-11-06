@@ -42,16 +42,16 @@ class NowcastingModel(pl.LightningModule):
             return [optimizer],{"scheduler" : lr_scheduler, "monitor" : self.lr_sch_params.monitor}
 
 
-    def calculate_loss(self, y, y_hat, leadtimes, **kwargs):
-        y = y[:,:leadtimes]
+    def calculate_loss(self, batch, y_hat, leadtimes, **kwargs):
+        batch["outputs"] = batch["outputs"][:,:leadtimes]
 
         if "heteroscedastic" in self.mode:
             uncertainty = y_hat[:,:leadtimes,:,:,1] # as log variance
             y_hat = y_hat[:,:leadtimes,:,:,0]
-            loss = self.criterion(y, y_hat, torch.exp(uncertainty))
+            loss = self.criterion(batch, y_hat, torch.exp(uncertainty))
         else:
             y_hat = y_hat[:,:leadtimes,:,:]
-            loss = self.criterion(y, y_hat)
+            loss = self.criterion(batch, y_hat)
 
         return loss
 
