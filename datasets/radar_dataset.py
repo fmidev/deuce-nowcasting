@@ -133,8 +133,9 @@ class AbstractRadarDataset(Dataset, ABC):
         if self.data_weighted_loss:
             weights = raw_data[self.num_frames_input:].clone()
             weights.apply_(lambda x : self.loss_weight_map.get(int(x), self.loss_weight_map[self.max_loss_weight_map_key]))
+            weights /= weights.sum()
         else:
-            weights = None
+            weights = torch.Tensor([1.0])
 
         data = self.storage_to_input_conversion(raw_data)
 
