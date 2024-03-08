@@ -6,7 +6,6 @@ from pysteps import verification
 
 
 from pincast_verif.metrics import Metric
-from pincast_verif.plot_tools import plot_1d
 
 
 class RankHistogramMetric(Metric):

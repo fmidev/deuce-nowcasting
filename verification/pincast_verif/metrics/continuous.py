@@ -3,8 +3,6 @@ from pysteps import verification
 import xarray as xr
 
 from pincast_verif.metrics import Metric
-from pincast_verif.plot_tools import plot_1d
-
 
 class ContinuousMetric(Metric):
     def __init__(self, leadtimes, cont_metrics, tables: dict = None, **kwargs) -> None:

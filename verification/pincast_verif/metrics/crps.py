@@ -3,7 +3,6 @@ from pysteps import verification
 import xarray as xr
 
 from pincast_verif.metrics import Metric
-from pincast_verif.plot_tools import plot_1d
 
 
 class CrpsMetric(Metric):
